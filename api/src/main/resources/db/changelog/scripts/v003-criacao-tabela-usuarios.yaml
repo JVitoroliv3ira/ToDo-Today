@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: v003-criacao-tabela-usuarios
+      author: João Vitor de Oliveira Santos
+      context: ddl
+      changes:
+        - createTable:
+            schemaName: TODOTODAY
+            tableName: TB_USERS
+            columns:
+              - column:
+                  name: ID
+                  type: NUMERIC
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: PK_USERS
+              - column:
+                  name: NAME
+                  type: VARCHAR2(80)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: EMAIL
+                  type: VARCHAR2(90)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: PASSWORD
+                  type: VARCHAR2(90)
+                  constraints:
+                    nullable: false
