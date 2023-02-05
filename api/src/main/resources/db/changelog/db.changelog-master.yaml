@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: "/db/changelog/scripts/v001-criacao-schema-aplicacao.yaml"
+  - include:
+      file: "/db/changelog/scripts/v002-criacao-sequence-usuarios.yaml"
+  - include:
+      file: "/db/changelog/scripts/v003-criacao-tabela-usuarios.yaml"
