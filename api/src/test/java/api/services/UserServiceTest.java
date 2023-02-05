@@ -1,5 +1,9 @@
 package api.services;
 
+import api.exceptions.NotFoundException;
+import api.models.User;
+import api.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +21,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserServiceTest {
     @Mock
     private final UserRepository repository;
-    private final UserService service;
+    private UserService service;
 
     @Autowired
     public UserServiceTest(UserRepository repository) {
         this.repository = repository;
+    }
+
+    @BeforeEach
+    void setUp() {
         this.service = new UserService(this.repository);
     }
 
@@ -73,7 +81,7 @@ class UserServiceTest {
         when(this.repository.findById(payload)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> this.service.read(payload))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Não foi possível encontrar este(a) usuário(a)");
+                .hasMessageContaining("Desculpe, não foi possível encontrar o usuário procurado. Verifique se as informações estão corretas e tente novamente.");
     }
 
     @Test
@@ -87,7 +95,7 @@ class UserServiceTest {
     @Test
     void update_should_call_exists_by_id_method_of_user_repository() {
         User payload = this.buildPayloadUser(1L, "test test", "test@test.com", "test_test");
-        when(this.repository.findById(payload.getId())).thenReturn(Boolean.TRUE);
+        when(this.repository.existsById(payload.getId())).thenReturn(Boolean.TRUE);
         this.service.update(payload);
         verify(this.repository, times(1)).existsById(payload.getId());
     }
@@ -95,16 +103,16 @@ class UserServiceTest {
     @Test
     void update_should_throw_an_exception_when_the_requested_user_does_not_exists() {
         User payload = this.buildPayloadUser(1L, "test test", "test@test.com", "test_test");
-        when(this.repository.findById(payload.getId())).thenReturn(Boolean.FALSE);
+        when(this.repository.existsById(payload.getId())).thenReturn(Boolean.FALSE);
         assertThatThrownBy(() -> this.service.update(payload))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Não foi possível encontrar este(a) usuário(a)");
+                .hasMessageContaining("Desculpe, não foi possível encontrar o usuário procurado. Verifique se as informações estão corretas e tente novamente.");
     }
 
     @Test
     void update_should_call_save_method_of_user_repository_when_the_requested_user_exists() {
         User payload = this.buildPayloadUser(1L, "test test", "test@test.com", "test_test");
-        when(this.repository.findById(payload.getId())).thenReturn(Boolean.TRUE);
+        when(this.repository.existsById(payload.getId())).thenReturn(Boolean.TRUE);
         this.service.update(payload);
         verify(this.repository, times(1)).save(payload);
     }
@@ -112,7 +120,7 @@ class UserServiceTest {
     @Test
     void update_should_return_the_result_of_save_method_of_user_repository_when_the_requested_user_exists() {
         User payload = this.buildPayloadUser(1L, "test test", "test@test.com", "test_test");
-        when(this.repository.findById(payload.getId())).thenReturn(Boolean.TRUE);
+        when(this.repository.existsById(payload.getId())).thenReturn(Boolean.TRUE);
         when(this.repository.save(payload)).thenReturn(payload);
         User result = this.service.update(payload);
         assertEquals(payload, result);
@@ -132,7 +140,7 @@ class UserServiceTest {
         when(this.repository.existsById(payload)).thenReturn(Boolean.FALSE);
         assertThatThrownBy(() -> this.service.delete(payload))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Não foi possível encontrar este(a) usuário(a)");
+                .hasMessageContaining("Desculpe, não foi possível encontrar o usuário procurado. Verifique se as informações estão corretas e tente novamente.");
     }
 
     @Test
