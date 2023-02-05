@@ -1,4 +1,4 @@
-package api.interfaces;
+package api.interfaces.utils;
 
 public interface IEntity<T> {
     T getId();

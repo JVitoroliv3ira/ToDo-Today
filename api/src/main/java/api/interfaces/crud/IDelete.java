@@ -1,7 +1,7 @@
 package api.interfaces.crud;
 
 import api.exceptions.NotFoundException;
-import api.interfaces.IEntity;
+import api.interfaces.utils.IEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IDelete<E extends IEntity<T>, T, R extends JpaRepository<E, T>> {

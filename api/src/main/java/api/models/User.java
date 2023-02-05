@@ -1,6 +1,6 @@
 package api.models;
 
-import api.interfaces.IEntity;
+import api.interfaces.utils.IEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
