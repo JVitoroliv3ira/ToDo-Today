@@ -1,5 +1,6 @@
 package api.services;
 
+import api.exceptions.BadRequestException;
 import api.exceptions.NotFoundException;
 import api.models.User;
 import api.repositories.UserRepository;
@@ -149,5 +150,22 @@ class UserServiceTest {
         when(this.repository.existsById(payload)).thenReturn(Boolean.TRUE);
         this.service.delete(payload);
         verify(this.repository, times(1)).deleteById(payload);
+    }
+
+    @Test
+    void validate_that_email_is_already_in_use_should_call_exists_by_email_method_of_user_repository() {
+        String payload = "test@test.com";
+        when(this.repository.existsByEmail(payload)).thenReturn(Boolean.FALSE);
+        this.service.validateThatEmailIsUnique(payload);
+        verify(this.repository, times(1)).existsByEmail(payload);
+    }
+
+    @Test
+    void validate_that_email_is_already_in_use_should_throw_an_exception_when_email_is_already_in_use() {
+        String payload = "test@test.com";
+        when(this.repository.existsByEmail(payload)).thenReturn(Boolean.TRUE);
+        assertThatThrownBy(() -> this.service.validateThatEmailIsUnique(payload))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("O email informado já está sendo utilizado.");
     }
 }
