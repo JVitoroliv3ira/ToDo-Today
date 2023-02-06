@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RequiredArgsConstructor
@@ -35,10 +34,9 @@ public class AuthController {
             return ResponseEntity
                     .status(CREATED)
                     .body(new ResponseDTO<>(user, null, null));
-        } catch (NotFoundException | BadRequestException e) {
-            var status = e instanceof NotFoundException ? NOT_FOUND : BAD_REQUEST;
+        } catch (BadRequestException e) {
             return ResponseEntity
-                    .status(status)
+                    .status(BAD_REQUEST)
                     .body(new ResponseDTO<>(null, null, List.of(e.getMessage())));
         }
     }
