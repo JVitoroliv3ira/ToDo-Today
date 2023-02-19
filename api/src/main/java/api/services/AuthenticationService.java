@@ -2,12 +2,14 @@ package api.services;
 
 import api.exceptions.BadRequestException;
 import api.interfaces.utils.IPasswordUtils;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +34,15 @@ public class AuthenticationService {
                     .compact();
     }
 
+    public String extractEmailFromToken(String token) {
+        return this.extractClaim(token, Claims::getSubject);
+    }
+
+    public Boolean isTokenValid(String token, UserDetails details) {
+        final String email = extractEmailFromToken(token);
+        return (email.equals(details.getUsername())) && !isTokenExpired(token);
+    }
+
     public void validatePasswordMatch(String rawPassword, String encodedPassword) {
         if(Boolean.FALSE.equals(this.comparePasswords(rawPassword, encodedPassword))) {
             throw new BadRequestException("Desculpe, suas credenciais estão incorretas. Verifique seu email e senha e tente novamente.");
@@ -40,6 +51,28 @@ public class AuthenticationService {
 
     private Boolean comparePasswords(String rawPassword, String encodedPassword) {
         return IPasswordUtils.matches(rawPassword, encodedPassword);
+    }
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+    
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Key getSignInKey() {
