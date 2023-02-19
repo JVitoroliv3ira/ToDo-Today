@@ -1,5 +1,6 @@
 package api.controllers;
 
+import api.dtos.DetailsDTO;
 import api.dtos.requests.UserAuthenticationRequestDTO;
 import api.dtos.requests.UserRegisterRequestDTO;
 import api.dtos.responses.AuthenticationResponseDTO;
@@ -31,14 +32,16 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(path = "/register")
-    public ResponseEntity<ResponseDTO<User>> register(@Valid @RequestBody UserRegisterRequestDTO request) {
+    public ResponseEntity<ResponseDTO<AuthenticationResponseDTO>> register(@Valid @RequestBody UserRegisterRequestDTO request) {
         try {
             this.userService.validateThatEmailIsUnique(request.getEmail());
             User user = this.userService.create(request.convert());
+            UserDetails details = new DetailsDTO(user);
+            String token = this.authenticationService.generateToken(details);
             
             return ResponseEntity
                     .status(CREATED)
-                    .body(new ResponseDTO<>(user, null, null));
+                    .body(new ResponseDTO<>(new AuthenticationResponseDTO(details, token), null, null));
         } catch (BadRequestException e) {
             return ResponseEntity
                     .status(BAD_REQUEST)
