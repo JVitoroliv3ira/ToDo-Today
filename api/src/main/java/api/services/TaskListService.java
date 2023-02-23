@@ -2,6 +2,7 @@ package api.services;
 
 import api.interfaces.crud.ICrudService;
 import api.models.TaskList;
+import api.models.User;
 import api.repositories.TaskListRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,17 @@ public class TaskListService implements ICrudService<TaskList, Long, TaskListRep
     @Getter
     private final TaskListRepository repository;
 
+    public TaskList create(TaskList taskList, User creator) {
+        this.associateCreatorWithTaskList(creator, taskList);
+        return this.create(taskList);
+    }
+
     @Override
     public String getEntityNotFoundMessage() {
         return "Desculpe, não foi possível encontrar a lista de tarefas.";
+    }
+
+    private void associateCreatorWithTaskList(User creator, TaskList taskList) {
+        taskList.setCreator(creator);
     }
 }
