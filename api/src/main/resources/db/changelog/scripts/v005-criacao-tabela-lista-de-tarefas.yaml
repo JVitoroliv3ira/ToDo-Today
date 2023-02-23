@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: v005-criacao-tabela-lista-de-tarefas
+      author: João Vitor de Oliveira Santos
+      context: ddl
+      changes:
+        - createTable:
+            schemaName: TODOTODAY
+            tableName: TB_TASKS_LISTS
+            columns:
+              - column:
+                  name: ID
+                  type: NUMERIC
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: PK_TASKS_LISTS
+              - column:
+                  name: TITLE
+                  type: VARCHAR2(80)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: DESCRIPTION
+                  type: VARCHAR2(300)
+              - column:
+                  name: CREATOR_ID
+                  type: NUMERIC
+                  constraints:
+                    nullable: false
+                    foreignKeyName: FK_TASK_LIST_USER
+                    references: TODOTODAY.TB_USERS(ID)
