@@ -20,12 +20,12 @@ public class TaskList implements IEntity<Long> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_TASKS_LISTS")
     @Column(name = "id")
     private Long id;
-    @Column(name = "TITLE")
+    @Column(name = "title")
     private String title;
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     private String description;
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "creator_id")
     private User creator;
 
 
