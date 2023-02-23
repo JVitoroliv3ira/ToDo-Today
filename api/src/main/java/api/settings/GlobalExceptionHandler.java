@@ -1,6 +1,7 @@
 package api.settings;
 
 import api.dtos.responses.ResponseDTO;
+import api.exceptions.BadRequestException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,5 +25,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(new ResponseDTO<>(null, null, erros));
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ResponseDTO<Object>> handleBadRequestException(BadRequestException ex) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(new ResponseDTO<>(null, null, List.of(ex.getMessage())));
     }
 }
