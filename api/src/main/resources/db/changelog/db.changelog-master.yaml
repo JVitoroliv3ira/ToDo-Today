@@ -5,3 +5,7 @@ databaseChangeLog:
       file: "/db/changelog/scripts/v002-criacao-sequence-usuarios.yaml"
   - include:
       file: "/db/changelog/scripts/v003-criacao-tabela-usuarios.yaml"
+  - include:
+      file: "/db/changelog/scripts/v004-criacao-sequence-lista-de-tarefas.yaml"
+  - include:
+      file: "/db/changelog/scripts/v005-criacao-tabela-lista-de-tarefas.yaml"
