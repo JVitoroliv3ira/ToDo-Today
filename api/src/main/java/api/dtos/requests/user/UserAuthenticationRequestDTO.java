@@ -1,4 +1,4 @@
-package api.dtos.requests;
+package api.dtos.requests.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

@@ -1,8 +1,8 @@
 package api.controllers;
 
 import api.dtos.DetailsDTO;
-import api.dtos.requests.UserAuthenticationRequestDTO;
-import api.dtos.requests.UserRegisterRequestDTO;
+import api.dtos.requests.user.UserAuthenticationRequestDTO;
+import api.dtos.requests.user.UserRegisterRequestDTO;
 import api.dtos.responses.AuthenticationResponseDTO;
 import api.dtos.responses.ResponseDTO;
 import api.exceptions.BadRequestException;

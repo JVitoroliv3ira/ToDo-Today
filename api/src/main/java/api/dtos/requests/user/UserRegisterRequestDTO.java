@@ -1,4 +1,4 @@
-package api.dtos.requests;
+package api.dtos.requests.user;
 
 import api.interfaces.utils.IPasswordUtils;
 import api.models.User;
