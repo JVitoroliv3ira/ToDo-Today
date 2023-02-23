@@ -2,7 +2,7 @@ databaseChangeLog:
   - changeSet:
       id: v004-criacao-sequence-lista-de-tarefas
       author: João Vitor de Oliveira Santos
-      context: dll
+      context: ddl
       changes:
         - createSequence:
             schemaName: TODOTODAY
