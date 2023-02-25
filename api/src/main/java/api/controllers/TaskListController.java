@@ -41,6 +41,15 @@ public class TaskListController {
                 .body(new ResponseDTO<>(null, List.of("Lista de tarefas deletada com sucesso!"), null));
     }
 
+    @GetMapping(path = "/detail/{id}")
+    public ResponseEntity<ResponseDTO<TaskListResponseDTO>> detail(@PathVariable Long id) {
+        // TODO: Implementar validação que a lista pertence ao usuário antes de detalhar
+        TaskList result = this.taskListService.read(id);
+        return ResponseEntity
+                .status(OK)
+                .body(new ResponseDTO<>(new TaskListResponseDTO(result), null, null));
+    }
+
     @GetMapping(path = "/paginate")
     public ResponseEntity<ResponseDTO<PageableDTO<TaskListResponseDTO>>> paginate(@RequestParam Integer page, @RequestParam Integer pageSize) {
         Page<TaskList> result = this.taskListService.paginate(AuthenticatedUserService.getAuthenticatedUserId(), page, pageSize);
