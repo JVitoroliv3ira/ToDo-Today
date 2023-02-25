@@ -35,6 +35,6 @@ public class TaskListController {
         Page<TaskList> result = this.taskListService.paginate(AuthenticatedUserService.getAuthenticatedUserId(), page, pageSize);
         return ResponseEntity
                 .status(OK)
-                .body(new ResponseDTO<>(new PageableDTO<>(), null, null));
+                .body(new ResponseDTO<>(new PageableDTO<>(result.map(TaskListResponseDTO::new)), null, null));
     }
 }
