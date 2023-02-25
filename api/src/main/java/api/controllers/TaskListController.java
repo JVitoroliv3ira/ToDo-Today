@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -28,6 +30,15 @@ public class TaskListController {
         return ResponseEntity
                 .status(CREATED)
                 .body(new ResponseDTO<>(new TaskListResponseDTO(result), null, null));
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<ResponseDTO<TaskListResponseDTO>> delete(@PathVariable Long id) {
+        // TODO: Implementar validação que a lista pertence ao usuário antes de deletar
+        this.taskListService.delete(id);
+        return ResponseEntity
+                .status(OK)
+                .body(new ResponseDTO<>(null, List.of("Lista de tarefas deletada com sucesso!"), null));
     }
 
     @GetMapping(path = "/paginate")
