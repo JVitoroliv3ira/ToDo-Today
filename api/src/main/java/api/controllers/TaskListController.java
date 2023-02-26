@@ -34,7 +34,7 @@ public class TaskListController {
 
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<ResponseDTO<TaskListResponseDTO>> delete(@PathVariable Long id) {
-        // TODO: Implementar validação que a lista pertence ao usuário antes de deletar
+        this.taskListService.validateTaskListCreator(id, AuthenticatedUserService.getAuthenticatedUser());
         this.taskListService.delete(id);
         return ResponseEntity
                 .status(OK)
@@ -43,8 +43,8 @@ public class TaskListController {
 
     @GetMapping(path = "/detail/{id}")
     public ResponseEntity<ResponseDTO<TaskListResponseDTO>> detail(@PathVariable Long id) {
-        // TODO: Implementar validação que a lista pertence ao usuário antes de detalhar
         TaskList result = this.taskListService.read(id);
+        this.taskListService.validateTaskListCreator(id, AuthenticatedUserService.getAuthenticatedUser());
         return ResponseEntity
                 .status(OK)
                 .body(new ResponseDTO<>(new TaskListResponseDTO(result), null, null));
