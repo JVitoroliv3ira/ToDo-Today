@@ -1,5 +1,6 @@
 package api.services;
 
+import api.exceptions.BadRequestException;
 import api.interfaces.crud.ICrudService;
 import api.models.TaskList;
 import api.models.User;
@@ -25,6 +26,12 @@ public class TaskListService implements ICrudService<TaskList, Long, TaskListRep
     public Page<TaskList> paginate(Long creatorId, Integer page, Integer pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         return this.repository.findAll(creatorId, pageable);
+    }
+
+    public void validateTaskListCreator(Long id, User creator) {
+        if (Boolean.FALSE.equals(this.repository.existsByIdAndCreatorId(id, creator.getId()))) {
+            throw new BadRequestException("Você não tem permissão para realizar esta ação.");
+        }
     }
 
     @Override
